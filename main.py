@@ -7,6 +7,9 @@ timeframe='1h'
 
 @app.route('/')
 def home():
+    return "I am alive"
+@app.route('/index')
+def index():
     print('Start')
     run_trading_bot()
     print('Stop')
