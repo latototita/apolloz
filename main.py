@@ -4,7 +4,7 @@ import os
 app = Flask(__app__)
 
 @app.route('/')
-def home()
+def home():
   return "I am alive"
 
 
