@@ -1,0 +1,9 @@
+asyncio
+csvkit
+Flask
+matplotlib
+metaapi-cloud-sdk
+numpy
+pandas
+pandas-ta
+scikit-learn
