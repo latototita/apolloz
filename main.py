@@ -7,7 +7,9 @@ timeframe='1h'
 
 @app.route('/')
 def home():
+    print('Start')
     run_trading_bot()
+    print('Stop')
     return "I am alive"
 
 if __name__=="__main__":
