@@ -130,7 +130,7 @@ def run_trading_bot():
                     print("--------------------------------------------------")
 
 
-        await asyncio.sleep(300)  # Sleep for 1 minute before the next iteration
+        await asyncio.sleep(1200)  # Sleep for 1 minute before the next iteration
     asyncio.run(main())
 
 
