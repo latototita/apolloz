@@ -8,9 +8,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
 #from sklearn.ensemble import forest
 from metaapi_cloud_sdk import MetaApi
-from metaapi_cloud_sdk.clients.metaApi.tradeException import TradeException
 from datetime import datetime, timedelta
-from metaapi_cloud_sdk import MetaApi
 from datetime import datetime, timedelta
 import os
 import asyncio
