@@ -27,7 +27,7 @@ def run_trading_bot_thread():
 
 
 # Route to initiate the trading bot
-@app.route('/')
+@app.route('/2')
 def initiate_trading_bot():
     global is_trading_bot_running
     
