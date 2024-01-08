@@ -96,7 +96,7 @@ def run_trading_bot():
                                     
                                     result = await connection.create_market_sell_order(
                                         symbol,
-                                        0.03,
+                                        0.01,
                                         stop_loss,
                                         take_profit,
                                         )
@@ -111,7 +111,7 @@ def run_trading_bot():
                                 try:
                                     result = await connection.create_market_buy_order(
                                         symbol,
-                                        0.03,
+                                        0.01,
                                         stop_loss,
                                         take_profit,
                                         )
