@@ -1,5 +1,5 @@
 from flask import Flask, request
-from script import run_trading_bot
+from script2 import run_trading_bot
 import threading
 import time
 
