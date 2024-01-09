@@ -89,7 +89,7 @@ def run_trading_bot():
                             print('passed 1')
                             # Connect to MetaApi API
                             
-                            if direction=='Sell' and current_price>take_profit:
+                            if current_price>take_profit:
                                 print('passed 2')
                                 stop_loss=current_price +((current_price-take_profit)*2)
                                 try:
@@ -105,7 +105,7 @@ def run_trading_bot():
                                 except Exception as err:
                                     print('Trade failed with error:')
                                     print(api.format_error(err))
-                            elif direction=='Buy' and current_price<take_profit:
+                            elif current_price<take_profit:
                                 print('passed 3')
                                 stop_loss=current_price -((take_profit-current_price)*2)
                                 try:
