@@ -129,4 +129,3 @@ def run_trading_bot():
     asyncio.run(main())
 
 
-run_trading_bot()
