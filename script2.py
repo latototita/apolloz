@@ -46,7 +46,7 @@ def run_trading_bot():
             #print(take_profit,min_difference_buy,min_difference_sell,mse)
             current_price=df['close'].iloc[-1]
 
-            if float(mse)<=0.00001:
+            if float(mse)<=0.001:
                 api = MetaApi(token)
                 account = await api.metatrader_account_api.get_account(accountId)
                 initial_state = account.state
@@ -85,7 +85,7 @@ def run_trading_bot():
                     if current_price>take_profit:
                         take_profit=take_profit+min_difference_sell
                         print('passed 2')
-                        stop_loss=current_price +((current_price-take_profit)*2)
+                        stop_loss=current_price +((current_price-take_profit)*3)
                         try:
                             
                             result = await connection.create_market_sell_order(
@@ -102,7 +102,7 @@ def run_trading_bot():
                     elif current_price<take_profit:
                         take_profit=take_profit-min_difference_buy
                         print('passed 3')
-                        stop_loss=current_price -((take_profit-current_price)*2)
+                        stop_loss=current_price -((take_profit-current_price)*3)
                         try:
                             result = await connection.create_market_buy_order(
                                 symbol,
