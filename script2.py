@@ -16,7 +16,7 @@ data_list=[]
 token = os.getenv('TOKEN') or 'eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2YjI0NTQ0ZWYzMWI0NzQ4NWMxNzQ1NmUzNzdmYTlhZiIsInBlcm1pc3Npb25zIjpbXSwidG9rZW5JZCI6IjIwMjEwMjEzIiwiaW1wZXJzb25hdGVkIjpmYWxzZSwicmVhbFVzZXJJZCI6IjZiMjQ1NDRlZjMxYjQ3NDg1YzE3NDU2ZTM3N2ZhOWFmIiwiaWF0IjoxNjg1NTM4OTg4fQ.K0bb-27iMrcf3gDYGylSgmf1KkcIgnLDL961KBHD3vuYwLC9funTPn-U7wBhvBUDN9pXwdwkBPoA19zIOiZLUxLcNWKcQD3i26TIdu9EhES1xnl1_dLfTPeDhN6SCHGZILh2fO331HexxRa0wqmOiUKYEZgLHSo9VXMCtFSgxJyqrhQzU35U76EWCKHI4yIYRAu8XSFR8RZ6GjeBgqI-J7Y--Z68ldAWisc2RKDUgFeo4ooillmrzTr73dr1usEn9APO25jeUGLm6Qkc8u8eox_vqSvFqovpZZ3czbR21-oEdqFT5EunGh-98WBND6IXfZlxDlBHJ-Ps7r1o9jm4A7vUPBFuGQ6MQ1dcUqKTNYA4p2DGA4lgB1kljoUQhPFau1QkgsJxc7KZExLs8Clg4aNybEO8SwP7uKt9V2UBDqRJT7ZUIrKKgz0uNisuPmS8ml5kKOKcZVQaAUvkbXJuI6vmKWVPeZdGEJu009W-tOuAvgiy2xgrtUpTFBgPAPciK-jrxiRdLHBTij40uYem0UhdmmlaUEH9FGnf9LpnVkvVTl7nrANf3g-yOI3yOAoBupZfAPucEGP8HVvZBfmwdu2GhAMs1cDDij49AUJEoBt1FDqYxOgIyvhGY5Baisn9FC_V-FROyKASzXz0A3cHZUZ63Vm9ghDsDA6rOJd1Kkk'
 accountId = os.getenv('ACCOUNT_ID') or '556c93cf-3c24-4095-b576-ed5279fc2d3d'
 symbol='EURUSDm'
-timeframe='4h'
+timeframe='1d'
 #symbol_list = ['XAGUSDm', 'EURUSDm', 'GBPUSDm', 'GBPTRYm', 'XAUUSDm', 'AUDCHFm', 'NZDUSDm', 'GBPCHFm', 'USDCHFm','XAUUSDm']
 #symbol_list = ['EURUSDm', 'GBPUSDm','GBPCHFm','USDCHFm','AUDCHFm',]
 
@@ -44,7 +44,7 @@ def run_trading_bot():
             df.set_index('time', inplace=True)
             take_profit,min_difference_buy,min_difference_sell,mse=prediction_home(df)
             #print(take_profit,min_difference_buy,min_difference_sell,mse)
-            current_price=df['close'].iloc[-1]
+
 
             if float(mse)<=0.001:
                 api = MetaApi(token)
@@ -75,11 +75,18 @@ def run_trading_bot():
                 else:
                     print('passed 1')
                     # Connect to MetaApi API
-                    
-                    if current_price>take_profit:
+                    prices = await connection.get_symbol_price(symbol)
+                    #print(prices)
+                    # Extract bid and ask prices
+                    bid_price =float(prices['bid'])
+                    ask_price = float(prices['ask'])
+                    current_market_price=((bid_price+ask_price)/2)
+                    current_price=current_market_price
+                    if current_market_price>take_profit:
                         #take_profit=take_profit+min_difference_sell
-                        print('passed 2')
+                        
                         stop_loss=current_price +((current_price-take_profit)*3)
+                        print('passed 2',take_profit,stop_loss)
                         try:
                             
                             result = await connection.create_market_sell_order(
@@ -93,10 +100,11 @@ def run_trading_bot():
                         except Exception as err:
                             print('Trade failed with error:')
                             print(api.format_error(err))
-                    elif current_price<take_profit:
+                    elif current_market_price<take_profit:
                         #take_profit=take_profit-min_difference_buy
-                        print('passed 3')
+                        
                         stop_loss=current_price -((take_profit-current_price)*3)
+                        print('passed 3',take_profit,stop_loss)
                         try:
                             result = await connection.create_market_buy_order(
                                 symbol,
@@ -108,7 +116,7 @@ def run_trading_bot():
                         except Exception as err:
                             print('Trade failed with error:')
                             print(api.format_error(err))
-
+                    
                     
                     
                             
@@ -121,5 +129,4 @@ def run_trading_bot():
 
             await asyncio.sleep(300)  # Sleep for 1 minute before the next iteration
     asyncio.run(main())
-
 
