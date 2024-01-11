@@ -36,9 +36,9 @@ def prediction_home(df):
     x_train, x_test, y_train, y_test = train_test_split(x_train, y_train, test_size=0.01, random_state=42, shuffle=False)
     # Define the parameter grid
     param_grid = {
-        'kernel': ['linear', 'rbf'],  # You can add more kernel options if needed
-        'C': [1,1.2,1.5,1.8,],  # Adjust these values based on your problem
-        'epsilon': [0.01, 0.1, 0.5]  # Adjust these values based on your problem
+        'kernel': ['linear'],  # You can add more kernel options if needed
+        'C': [0.01, 0.1, 0.5,1,1.2,1.5,1.8,2,2.5,3,3.5,4,4.5],  # Adjust these values based on your problem
+        'epsilon': [0.001,0.0001,0.01, 0.1, 0.5,1,2,3,4,5]  # Adjust these values based on your problem
     }
 
     # Create the SVR model
